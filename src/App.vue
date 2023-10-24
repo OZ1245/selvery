@@ -1,17 +1,64 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <the-tabs
+      v-model="activeTabId"
+      :list="tabsList"
+    >
+      <template v-slot:default="{ id }">
+        <component :is="id"></component>
+      </template>
+    </the-tabs>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { mapActions } from 'vuex'
+
+import TheTabs from '@/components/TheTabs.vue'
+import DataVariables from '@/components/DataVariables.vue'
+import ComputedVariables from '@/components/ComputedVariables.vue'
+import CheckCalculating from '@/components/CheckCalculating.vue'
 
 export default {
   name: 'App',
+
   components: {
-    HelloWorld
+    TheTabs,
+    DataVariables,
+    ComputedVariables,
+    CheckCalculating,
+  },
+
+  data() {
+    return {
+      activeTabId: 0,
+      tabsList: [
+        {
+          id: 'DataVariables',
+          title: 'Вводимые значения'
+        },
+        {
+          id: 'ComputedVariables',
+          title: 'Вычисляемые значения'
+        },
+        {
+          id: 'CheckCalculating',
+          title: 'Проверка расчетов'
+        },
+      ]
+    }
+  },
+
+  created() {
+    this.initCachedData()
+  },
+
+  mounted() {
+    this.activeTabId = this.tabsList[0].id
+  },
+
+  methods: {
+    ...mapActions(['initCachedData'])
   }
 }
 </script>
