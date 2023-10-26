@@ -39,6 +39,15 @@ export default new Vuex.Store({
         type,
         value
       } 
+    },
+
+    UPDATE_COMPUTED(state, { index, name, type, equation, value }) {
+      state.computedVariables[index] = {
+        name,
+        type,
+        equation,
+        value
+      } 
     }
   },
   actions: {
@@ -74,24 +83,26 @@ export default new Vuex.Store({
         })
       }
 
-      // localStorage.removeItem('selveryCache')
-
-      // localStorage.setItem(
-      //   'selveryCache',
-      //   JSON.stringify(state)
-      // )
       updateCacheLocalStorage(state)
     },
 
-    addComputedVariable({ state, commit }, payload) {
-      commit('SET_COMPUTED', payload)
+    addComputedVariable({ state, commit }, { name, type, equation, value, index }) {
+      if (typeof index !== 'undefined') {
+        commit('UPDATE_COMPUTED', {
+          name,
+          type,
+          value,
+          index
+        })
+      } else {
+        commit('SET_COMPUTED', { 
+          name, 
+          type, 
+          equation,
+          value 
+        })
+      }
 
-      // localStorage.removeItem('selveryCache')
-
-      // localStorage.setItem(
-      //   'selveryCache',
-      //   JSON.stringify(state)
-      // )
       updateCacheLocalStorage(state)
     },
 

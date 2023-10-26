@@ -26,17 +26,27 @@
               class="table__row"
               :class="{ 'table__row--hidden': i === activeRow }"
             >
-              <td @click="onEditVariable(item, i)">{{ item.name }}</td>
-              <td @click="onEditVariable(item, i)">{{ item.type }}</td>
-              <td @click="onEditVariable(item, i)">{{ item.value }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.type }}</td>
+              <td>{{ item.value }}</td>
               <td>
+                <button
+                  type="button"
+                  class="button button--icon"
+                  title="Редактировать"
+                  @click="onEditVariable(item, i)"
+                >
+                  ...
+                </button>
                 <button 
                   class="button button--icon" 
                   type="button"
+                  title="Удалить"
                   @click="onRemoveVariable(i)"
                 >X</button>
               </td>
             </tr>
+            <!-- Edit form -->
             <tr 
               v-if="activeRow === i"
               :key="`variable-edit-${i}`"
@@ -182,7 +192,7 @@ export default {
       this.activeRow = -1
       this.form.name = ''
       this.form.type = 0
-      this.form.value = 0
+      this.form.value = ''
     },
 
     onAddNewVariable() {
