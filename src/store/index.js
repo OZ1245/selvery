@@ -91,6 +91,7 @@ export default new Vuex.Store({
         commit('UPDATE_COMPUTED', {
           name,
           type,
+          equation,
           value,
           index
         })

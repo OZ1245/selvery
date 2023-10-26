@@ -13,6 +13,7 @@
           <th>Переменная</th>
           <th>Тип</th>
           <th>Формула</th>
+          <th>Значение</th>
           <th></th>
         </tr>
       </thead>
@@ -27,8 +28,9 @@
               :class="{ 'table__row--hidden': i === activeRow }"
             >
               <td>{{ item.name }}</td>
-              <td>{{ item.type }}</td>
+              <td>{{ getTypeTitle(item.type) }}</td>
               <td>{{ item.equation }}</td>
+              <td>{{ (!item.type) ? item.value : getLogicTitle(item.value) }}</td>
               <td>
                 <button
                   type="button"
@@ -65,6 +67,7 @@
               <td>
                 <textarea v-model="form.equation" rows="2"></textarea>
               </td>
+              <td></td>
               <td>
                 <button 
                   type="button" 
@@ -103,6 +106,8 @@
             <textarea v-model="form.equation" rows="2"></textarea>
           </td>
 
+          <td></td>
+
           <td>
             <button 
               type="button"
@@ -135,9 +140,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { useCalculation } from '@/libs/useCalculation'
+import translateLogicValues from '@/mixins/translateLogicValues'
 
 export default {
   name: 'ComputedVariables',
+
+  mixins: [ translateLogicValues ],
 
   data() {
     return {
@@ -161,7 +170,7 @@ export default {
         return false
       }
 
-      if (this.form.name.match(/[^a-zA-Z0-9]/g)) {
+      if (this.form.name.match(/[^a-zA-Z]/g)) {
         return false
       }
 
@@ -194,6 +203,13 @@ export default {
     },
 
     onApplyVariable(index) {
+      const { calculate } = useCalculation({
+        exceptionVariable: this.form.name,
+        equation: this.form.equation
+      })
+
+      this.form.value = calculate()
+
       this.addComputedVariable({
         ...this.form,
         index
@@ -218,7 +234,7 @@ export default {
       this.form.type = item.type
       this.form.equation = item.equation
       this.form.value = item.value
-    }
+    },
   }
 }
 </script>

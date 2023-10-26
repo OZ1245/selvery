@@ -27,8 +27,8 @@
               :class="{ 'table__row--hidden': i === activeRow }"
             >
               <td>{{ item.name }}</td>
-              <td>{{ item.type }}</td>
-              <td>{{ item.value }}</td>
+              <td>{{ getTypeTitle(item.type) }}</td>
+              <td>{{ (!item.type) ? item.type : getLogicTitle(item.value) }}</td>
               <td>
                 <button
                   type="button"
@@ -107,7 +107,7 @@
           </td>
           <td>
             <template v-if="form.type === 0">
-              <input v-model="form.value" type="number" />
+              <input v-model.number="form.value" type="number" />
             </template>
 
             <template v-if="form.type === 1">
@@ -149,9 +149,12 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import translateLogicValues from '@/mixins/translateLogicValues';
 
 export default {
   name: 'DataVariables',
+
+  mixins: [ translateLogicValues ],
 
   data() {
     return {
@@ -174,7 +177,7 @@ export default {
         return false
       }
 
-      if (this.form.name.match(/[^a-zA-Z0-9]/g)) {
+      if (this.form.name.match(/[^a-zA-Z]/g)) {
         return false
       }
 
@@ -187,6 +190,18 @@ export default {
       'addDataVariable',
       'removeDataVariable'
     ]),
+
+    // getTypeTitle(value) {
+    //   return !value 
+    //     ? 'Число'
+    //     : 'Логическое значение'
+    // },
+
+    // getLogicTitle(value) {
+    //   return value
+    //     ? 'Правда'
+    //     : 'Ложь'
+    // },
 
     clearForm() {
       this.activeRow = -1
@@ -228,7 +243,7 @@ export default {
       this.form.name = item.name
       this.form.type = item.type
       this.form.value = item.value
-    }
+    },
   }
 }
 </script>
