@@ -229,6 +229,13 @@ export default {
     onEditVariable(item, index) {
       if (this.activeRow >= 0) return 
 
+      const { calculate } = useCalculation({
+        exceptionVariable: this.form.name,
+        equation: this.form.equation
+      })
+
+      this.form.value = calculate()
+
       this.activeRow = index
       this.form.name = item.name
       this.form.type = item.type
