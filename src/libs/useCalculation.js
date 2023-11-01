@@ -1,6 +1,6 @@
 import store from '@/store'
 
-export function useCalculation (options) {
+export function useCalculation () {
   const operators = [
     {
       name: 'ternary',
@@ -28,6 +28,11 @@ export function useCalculation (options) {
       handler: ([ a, b ]) => (+a - +b)
     }
   ]
+  let options = null
+
+  const setOptions = (_options) => {
+    options = _options
+  }
 
   const variablesParser = () => {
     // console.log('--- variablesParser ---')
@@ -117,6 +122,7 @@ export function useCalculation (options) {
   }
 
   return {
-    calculate
+    setOptions,
+    calculate,
   }
 }

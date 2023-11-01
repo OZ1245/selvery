@@ -191,18 +191,6 @@ export default {
       'removeDataVariable'
     ]),
 
-    // getTypeTitle(value) {
-    //   return !value 
-    //     ? 'Число'
-    //     : 'Логическое значение'
-    // },
-
-    // getLogicTitle(value) {
-    //   return value
-    //     ? 'Правда'
-    //     : 'Ложь'
-    // },
-
     clearForm() {
       this.activeRow = -1
       this.form.name = ''
@@ -244,6 +232,10 @@ export default {
       this.form.type = item.type
       this.form.value = item.value
     },
+
+    recalculateComputedVariables() {
+      
+    }
   }
 }
 </script>
