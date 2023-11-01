@@ -28,7 +28,7 @@
             >
               <td>{{ item.name }}</td>
               <td>{{ getTypeTitle(item.type) }}</td>
-              <td>{{ (!item.type) ? item.type : getLogicTitle(item.value) }}</td>
+              <td>{{ (!item.type) ? item.value : getLogicTitle(item.value) }}</td>
               <td>
                 <button
                   type="button"
@@ -149,7 +149,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import translateLogicValues from '@/mixins/translateLogicValues';
+import translateLogicValues from '@/mixins/translateLogicValues'
+import { useCalculation } from '@/libs/useCalculation'
+
+const { 
+  setOptions,
+  calculate 
+} = useCalculation()
 
 export default {
   name: 'DataVariables',
@@ -169,7 +175,8 @@ export default {
 
   computed: {
     ...mapState({
-      variables: ({ dataVariables }) => dataVariables
+      variables: ({ dataVariables }) => dataVariables,
+      computedVariables: ({ computedVariables }) => computedVariables
     }),
 
     validate() {
@@ -188,6 +195,7 @@ export default {
   methods: {
     ...mapActions([
       'addDataVariable',
+      'addComputedVariable',
       'removeDataVariable'
     ]),
 
@@ -212,7 +220,10 @@ export default {
         ...this.form, 
         index
       })
+
       this.clearForm()
+
+      this.recalculateComputedVariables()
     },
 
     onCancelAdding() {
@@ -234,7 +245,21 @@ export default {
     },
 
     recalculateComputedVariables() {
-      
+      this.computedVariables
+        .map((variable, i) => {
+          setOptions({
+            exceptionVariable: variable.name,
+            equation: variable.equation
+          })
+
+          const value = calculate()
+
+          this.addComputedVariable({
+            ...variable,
+            value,
+            index: i
+          })
+        })
     }
   }
 }
