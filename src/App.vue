@@ -8,6 +8,22 @@
         <component :is="id"></component>
       </template>
     </the-tabs>
+
+    <section class="controls">
+      <button 
+        type="button"
+        @click="onSaveData()"
+      >
+        Сохранить
+      </button>
+
+      <button 
+        type="button"
+        @click="onRemoveData()"
+      >
+        Отчистить
+      </button>
+    </section>
   </div>
 </template>
 
@@ -58,7 +74,19 @@ export default {
   },
 
   methods: {
-    ...mapActions(['initCachedData'])
+    ...mapActions([
+      'initCachedData',
+      'saveData',
+      'removeData'
+    ]),
+
+    onSaveData() {
+      this.saveData()
+    },
+
+    onRemoveData() {
+      this.removeData()
+    }
   }
 }
 </script>

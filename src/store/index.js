@@ -52,8 +52,23 @@ export default new Vuex.Store({
   },
   actions: {
     initCachedData({ commit }) {
-      const ls = localStorage.getItem('selveryCache')
+      const lsCache = localStorage.getItem('selveryCache')
+      const ls = localStorage.getItem('selvery')
 
+      if (lsCache) {
+        const data = JSON.parse(lsCache)
+
+        data.dataVariables.map((item) => {
+          commit('SET_DATA', item)
+        })
+
+        data.computedVariables.map((item) => {
+          commit('SET_COMPUTED', item)
+        })
+
+        return
+      } 
+      
       if (ls) {
         const data = JSON.parse(ls)
 
@@ -64,6 +79,8 @@ export default new Vuex.Store({
         data.computedVariables.map((item) => {
           commit('SET_COMPUTED', item)
         })
+
+        return
       }
     },
 
@@ -87,12 +104,6 @@ export default new Vuex.Store({
     },
 
     addComputedVariable({ state, commit }, { name, type, equation, value, index }) {
-      console.log('--- addComputedVariable ---')
-      console.log('name:', name)
-      console.log('type:', type)
-      console.log('equation:', equation)
-      console.log('value:', value)
-      console.log('index:', index)
       if (typeof index !== 'undefined') {
         commit('UPDATE_COMPUTED', {
           name,
