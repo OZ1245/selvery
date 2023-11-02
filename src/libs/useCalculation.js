@@ -1,11 +1,17 @@
 import store from '@/store'
 
-export function useCalculation () {
+export function useCalculation (_options) {
   const operators = [
     {
       name: 'ternary',
       value: '?',
-      handler: ([ a, b, c ]) => (a ? b : c)
+      handler: ([ a, b, c ]) => {
+        console.log('a:', typeof a, a)
+        console.log('b:',b)
+        console.log('c:',c)
+        console.log('a ? b : c:', +a ? b : c)
+        return +a ? b : c
+      }
     },
     {
       name: 'multiplication',
@@ -28,22 +34,18 @@ export function useCalculation () {
       handler: ([ a, b ]) => (+a - +b)
     }
   ]
-  let options = null
-
-  const setOptions = (_options) => {
-    options = _options
+  let options = {
+    exceptionVariable: _options?.exceptionVariable || '',
+    equation: _options?.equation || '',
+    variables: _options?.variables || []
   }
 
   const variablesParser = () => {
-    // console.log('--- variablesParser ---')
-
-    const variables = [
-      ...store.state.dataVariables,
-      ...store.state.computedVariables
-    ]
+    console.log('--- variablesParser ---')
 
     let result = options.equation
-    variables.map((variable) => {
+    console.log('options.variables:', options.variables)
+    options.variables.map((variable) => {
       if (variable.name === options.exceptionVariable) return
 
       const regexp = new RegExp(variable.name, 'g')
@@ -121,8 +123,36 @@ export function useCalculation () {
     return bracketsParser(arithmeticString)
   }
 
+  const recalculate = () => {
+    console.log('--- recalculate ---')
+
+    store.state.computedVariables
+      .map((item, i) => {
+        console.log('item:', item)
+
+        options = {
+          exceptionVariable: item.name,
+          equation: item.equation,
+          variables: [
+            ...store.state.dataVariables,
+            ...store.state.computedVariables
+          ]
+        }
+
+        const value = (item.type === 0)
+          ? +!!calculate() 
+          : calculate()
+
+        store.dispatch('addComputedVariable', {
+          ...item,
+          value,
+          index: i
+        })
+      })
+  }
+
   return {
-    setOptions,
     calculate,
+    recalculate
   }
 }

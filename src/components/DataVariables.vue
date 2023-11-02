@@ -62,16 +62,19 @@
                 </select>
               </td>
               <td>
-                <template v-if="form.type === 0">
-                  <input v-model.number="form.value" type="number" />
-                </template>
+                <input 
+                  v-if="form.type === 0"
+                  v-model.number="form.value" 
+                  type="number" 
+                />
 
-                <template v-if="form.type === 1">
-                  <select v-model.number="form.value">
-                    <option value="0">Нет</option>
-                    <option value="1">Да</option>
-                  </select>
-                </template>
+                <select 
+                  v-if="form.type === 1"
+                  v-model.number="form.value"
+                >
+                  <option value="0">Нет</option>
+                  <option value="1">Да</option>
+                </select>
               </td>
               <td>
                 <button 
@@ -106,16 +109,19 @@
             </select>
           </td>
           <td>
-            <template v-if="form.type === 0">
-              <input v-model.number="form.value" type="number" />
-            </template>
+            <input 
+              v-if="form.type === 0"
+              v-model.number="form.value" 
+              type="number" 
+            />
 
-            <template v-if="form.type === 1">
-              <select v-model.number="form.value">
-                <option value="0">Нет</option>
-                <option value="1">Да</option>
-              </select>
-            </template>
+            <select 
+              v-if="form.type === 1"
+              v-model.number="form.value"
+            >
+              <option value="0">Нет</option>
+              <option value="1">Да</option>
+            </select>
           </td>
           <td>
             <button 
@@ -152,11 +158,6 @@ import { mapState, mapActions } from 'vuex'
 import translateLogicValues from '@/mixins/translateLogicValues'
 import { useCalculation } from '@/libs/useCalculation'
 
-const { 
-  setOptions,
-  calculate 
-} = useCalculation()
-
 export default {
   name: 'DataVariables',
 
@@ -176,7 +177,6 @@ export default {
   computed: {
     ...mapState({
       variables: ({ dataVariables }) => dataVariables,
-      computedVariables: ({ computedVariables }) => computedVariables
     }),
 
     validate() {
@@ -207,14 +207,15 @@ export default {
     },
 
     onAddNewVariable() {
-      console.log('--- onAddNewVariable ---')
+      // console.log('--- onAddNewVariable ---')
       if (this.activeRow >= 0) return
 
       this.activeRow = this.variables.length
     },
 
     onApplyVariable(index) {
-      console.log('--- onApplyVariable ---')
+      // console.log('--- onApplyVariable ---')
+      const { recalculate } = useCalculation()
 
       this.addDataVariable({
         ...this.form, 
@@ -223,7 +224,7 @@ export default {
 
       this.clearForm()
 
-      this.recalculateComputedVariables()
+      recalculate()
     },
 
     onCancelAdding() {
@@ -243,24 +244,6 @@ export default {
       this.form.type = item.type
       this.form.value = item.value
     },
-
-    recalculateComputedVariables() {
-      this.computedVariables
-        .map((variable, i) => {
-          setOptions({
-            exceptionVariable: variable.name,
-            equation: variable.equation
-          })
-
-          const value = calculate()
-
-          this.addComputedVariable({
-            ...variable,
-            value,
-            index: i
-          })
-        })
-    }
   }
 }
 </script>

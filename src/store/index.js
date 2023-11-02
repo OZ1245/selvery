@@ -87,6 +87,12 @@ export default new Vuex.Store({
     },
 
     addComputedVariable({ state, commit }, { name, type, equation, value, index }) {
+      console.log('--- addComputedVariable ---')
+      console.log('name:', name)
+      console.log('type:', type)
+      console.log('equation:', equation)
+      console.log('value:', value)
+      console.log('index:', index)
       if (typeof index !== 'undefined') {
         commit('UPDATE_COMPUTED', {
           name,

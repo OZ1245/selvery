@@ -143,11 +143,6 @@ import { mapState, mapActions } from 'vuex'
 import { useCalculation } from '@/libs/useCalculation'
 import translateLogicValues from '@/mixins/translateLogicValues'
 
-const { 
-  setOptions,
-  calculate 
-} = useCalculation()
-
 export default {
   name: 'ComputedVariables',
 
@@ -208,7 +203,9 @@ export default {
     },
 
     onApplyVariable(index) {
-      setOptions({
+      const { calculate, recalculate } = useCalculation()
+
+      calculate({
         exceptionVariable: this.form.name,
         equation: this.form.equation
       })
@@ -221,6 +218,8 @@ export default {
       })
 
       this.clearForm()
+
+      recalculate()
     },
 
     onCancelAdding() {
