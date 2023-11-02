@@ -1,15 +1,20 @@
 <template>
   <div id="app">
-    <the-tabs
-      v-model="activeTabId"
-      :list="tabsList"
-    >
-      <template v-slot:default="{ id }">
-        <component :is="id"></component>
-      </template>
-    </the-tabs>
+    <main class="main">
+      <!-- <div class="main__content"> -->
+        <the-tabs
+          v-model="activeTabId"
+          :list="tabsList"
+          class="tabs"
+        >
+          <template v-slot:default="{ id }">
+            <component :is="id"></component>
+          </template>
+        </the-tabs>
+      <!-- </div> -->
+    </main>
 
-    <section class="controls">
+    <footer class="footer">
       <button 
         type="button"
         @click="onSaveData()"
@@ -23,14 +28,14 @@
       >
         Отчистить
       </button>
-    </section>
+    </footer>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
-import TheTabs from '@/components/TheTabs.vue'
+import TheTabs from '@/components/ui/TheTabs.vue'
 import DataVariables from '@/components/DataVariables.vue'
 import ComputedVariables from '@/components/ComputedVariables.vue'
 import CheckCalculating from '@/components/CheckCalculating.vue'
@@ -90,14 +95,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

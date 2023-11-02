@@ -1,0 +1,19 @@
+@import '@/assets/scss/functions';
+
+.icon-button {
+  padding-block: calc(var(--b-padding-block) / 2);
+  padding-inline: calc(var(--b-padding-inline) / 2);
+
+  color: var(--c-primary);
+  border: none;
+  background: none;
+  
+  &:hover:not(:disabled) {
+    color: modify-color(var(--c-primary), 'lighten');
+    cursor: pointer;
+  }
+  
+  &:disabled {
+    color: var(--c-disabled);
+  }
+}

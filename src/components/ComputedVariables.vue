@@ -9,7 +9,7 @@
       </p>
 
       <thead>
-        <tr>
+        <tr class="table__row table__row--header">
           <th>Переменная</th>
           <th>Тип</th>
           <th>Формула</th>
@@ -27,25 +27,21 @@
               class="table__row"
               :class="{ 'table__row--hidden': i === activeRow }"
             >
-              <td>{{ item.name }}</td>
+              <td class="table__cell--name">{{ item.name }}</td>
               <td>{{ getTypeTitle(item.type) }}</td>
               <td>{{ item.equation }}</td>
               <td>{{ (!item.type) ? item.value : getLogicTitle(item.value) }}</td>
               <td>
-                <button
-                  type="button"
-                  class="button button--icon"
+                <icon-button
                   title="Редактировать"
+                  icon="PencilAlt"
                   @click="onEditVariable(item, i)"
-                >
-                  ...
-                </button>
-                <button 
-                  class="button button--icon" 
-                  type="button"
+                />
+                <icon-button 
                   title="Удалить"
+                  icon="Trash"
                   @click="onRemoveVariable(i)"
-                >X</button>
+                />
               </td>
             </tr>
             
@@ -69,19 +65,17 @@
               </td>
               <td></td>
               <td>
-                <button 
-                  type="button" 
-                  class="button button--icon"
+                <icon-button 
                   :disabled="!validate"
                   title="Сохранить переменную"
+                  icon="Check"
                   @click="onApplyVariable(i)"
-                >V</button>
-                <button 
-                  class="button button--icon" 
-                  type="button"
+                />
+                <icon-button 
                   title="Отменить создание переменной"
+                  icon="X"
                   @click="onCancelAdding"
-                >X</button>
+                />
               </td>
             </tr>
           </template>
@@ -109,19 +103,17 @@
           <td></td>
 
           <td>
-            <button 
-              type="button"
-              class="button button--icon"
+            <icon-button 
               :disabled="!validate"
               title="Сохранить переменную"
+              icon="Check"
               @click="onApplyVariable()"
-            >V</button>
-            <button 
-              class="button button--icon" 
-              type="button"
+            />
+            <icon-button 
               title="Отменить создание переменной"
+              icon="X"
               @click="onCancelAdding"
-            >X</button>
+            />
           </td>
         </tr>
       </tbody>
@@ -142,11 +134,16 @@
 import { mapState, mapActions } from 'vuex'
 import { useCalculation } from '@/libs/useCalculation'
 import translateLogicValues from '@/mixins/translateLogicValues'
+import IconButton from './ui/IconButton.vue'
 
 export default {
   name: 'ComputedVariables',
 
   mixins: [ translateLogicValues ],
+
+  components: {
+    IconButton
+  },
 
   data() {
     return {

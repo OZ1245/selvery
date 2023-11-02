@@ -26,26 +26,23 @@
               class="table__row"
               :class="{ 'table__row--hidden': i === activeRow }"
             >
-              <td>{{ item.name }}</td>
+              <td class="table__cell--name">{{ item.name }}</td>
               <td>{{ getTypeTitle(item.type) }}</td>
               <td>{{ (!item.type) ? item.value : getLogicTitle(item.value) }}</td>
-              <td>
-                <button
-                  type="button"
-                  class="button button--icon"
+              <td class="table__cell--controls">
+                <icon-button
                   title="Редактировать"
+                  icon="PencilAlt"
                   @click="onEditVariable(item, i)"
-                >
-                  ...
-                </button>
-                <button 
-                  class="button button--icon" 
-                  type="button"
+                />
+                <icon-button 
                   title="Удалить"
+                  icon="Trash"
                   @click="onRemoveVariable(i)"
-                >X</button>
+                />
               </td>
             </tr>
+
             <!-- Edit form -->
             <tr 
               v-if="activeRow === i"
@@ -77,19 +74,17 @@
                 </select>
               </td>
               <td>
-                <button 
-                  type="button" 
-                  class="button button--icon"
+                <icon-button 
                   :disabled="!validate"
                   title="Сохранить переменную"
+                  icon="Check"
                   @click="onApplyVariable(i)"
-                >V</button>
-                <button 
-                  class="button button--icon" 
-                  type="button"
+                />
+                <icon-button 
                   title="Отменить создание переменной"
+                  icon="X"
                   @click="onCancelAdding"
-                >X</button>
+                />
               </td>
             </tr>
           </template>
@@ -123,33 +118,30 @@
               <option value="1">Да</option>
             </select>
           </td>
-          <td>
-            <button 
-              type="button" 
-              class="button button--icon"
+          <td class="table__cell--controls">
+            <icon-button 
               :disabled="!validate"
               title="Сохранить переменную"
+              icon="Check"
               @click="onApplyVariable()"
-            >V</button>
-            <button 
-              class="button button--icon" 
-              type="button"
+            />
+            <icon-button 
               title="Отменить создание переменной"
-              @click="onCancelAdding"
-            >X</button>
+              icon="X"
+              @click="onCancelAdding()"
+            />
           </td>
         </tr>
       </tbody>
     </table>
 
-    <button 
-      class="button button--primary" 
-      type="button"
+    <the-button 
+      type="primary"
       :disabled="activeRow >= 0"
       @click="onAddNewVariable"
     >
       Добавить переменную
-    </button>
+    </the-button>
   </div>
 </template>
 
@@ -157,11 +149,18 @@
 import { mapState, mapActions } from 'vuex'
 import translateLogicValues from '@/mixins/translateLogicValues'
 import { useCalculation } from '@/libs/useCalculation'
+import IconButton from '@/components/ui/IconButton.vue'
+import TheButton from './ui/TheButton.vue'
 
 export default {
   name: 'DataVariables',
 
   mixins: [ translateLogicValues ],
+
+  components: {
+    IconButton,
+    TheButton
+  },
 
   data() {
     return {

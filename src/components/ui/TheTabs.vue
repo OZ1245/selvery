@@ -5,7 +5,7 @@
         v-for="(item, i) in list"
         :key="`tab-${i}`" 
         class="tabs__item"
-        :class="{ 'tab-panel__tab--active': item.id === value }"
+        :class="{ 'tabs__item--active': item.id === value }"
         @click="onChangeTab(item)"
       >
         {{ item.title }}
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import '@/assets/scss/components/tabs.scss'
+
 export default {
   name: 'TheTabs',
 
